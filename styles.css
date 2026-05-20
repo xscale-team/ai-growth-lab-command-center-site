@@ -340,6 +340,7 @@ h3 {
 .channel-summary,
 .teaching-mini-list,
 .teaching-list,
+.join-link-grid,
 .experiment-grid {
   display: grid;
   gap: 12px;
@@ -354,6 +355,7 @@ h3 {
 .channel-card,
 .teaching-mini-item,
 .teaching-card,
+.join-link-card,
 .experiment-card {
   border: 1px solid #e3edf4;
   border-radius: 8px;
@@ -731,36 +733,46 @@ td span {
   gap: 12px;
 }
 
-.channel-card {
+.join-link-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.channel-card,
+.join-link-card {
   padding: 15px;
 }
 
-.channel-card-top {
+.channel-card-top,
+.join-link-top {
   display: flex;
   justify-content: space-between;
   gap: 14px;
 }
 
-.channel-card-top span {
+.channel-card-top span,
+.join-link-top span {
   color: var(--blue);
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.channel-card-top strong {
+.channel-card-top strong,
+.join-link-top strong {
   display: block;
   margin-top: 5px;
   font-size: 18px;
 }
 
-.channel-card-top p {
+.channel-card-top p,
+.join-link-top p {
   margin: 5px 0 0;
   color: var(--muted);
   font-size: 13px;
 }
 
-.channel-card-top b {
+.channel-card-top b,
+.join-link-top b {
   align-self: flex-start;
   border-radius: 999px;
   padding: 6px 9px;
@@ -769,22 +781,36 @@ td span {
   font-size: 12px;
 }
 
-.channel-card dl {
+.join-link-top b {
+  min-width: 42px;
+  text-align: center;
+}
+
+.channel-card dl,
+.join-link-card dl {
   display: grid;
   gap: 6px;
   margin: 14px 0 0;
 }
 
-.channel-card dt {
+.channel-card dt,
+.join-link-card dt {
   color: var(--muted);
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.channel-card dd {
+.channel-card dd,
+.join-link-card dd {
   margin: 0 0 5px;
   font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.join-link-card a {
+  color: var(--blue);
+  text-decoration: none;
 }
 
 .teaching-mini-item {
@@ -945,13 +971,14 @@ td span {
   }
 
   .nav-list {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
   .two-col,
   .form-grid,
   .experiment-grid,
   .channel-grid,
+  .join-link-grid,
   .channel-summary,
   .pipeline-steps,
   .skool-plan-grid,
@@ -982,6 +1009,7 @@ td span {
   .form-grid,
   .experiment-grid,
   .channel-grid,
+  .join-link-grid,
   .channel-summary,
   .pipeline-steps,
   .skool-plan-grid,

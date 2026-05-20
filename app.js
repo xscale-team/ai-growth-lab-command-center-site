@@ -19,6 +19,7 @@ document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
 document.getElementById("resetBtn").addEventListener("click", resetData);
 document.getElementById("contentForm").addEventListener("submit", addContentResult);
 document.getElementById("channelForm").addEventListener("submit", addTeamChannel);
+document.getElementById("joinLinkForm").addEventListener("submit", addJoinLink);
 document.getElementById("teachingForm").addEventListener("submit", addTeachingTopic);
 document.getElementById("platformFilter").addEventListener("change", renderContentTable);
 document.getElementById("sourceFilter").addEventListener("change", renderContentTable);
@@ -41,6 +42,7 @@ function loadState() {
 
 function hydrateState(target) {
   target.teamChannels = target.teamChannels || structuredClone(window.dashboardSeed.teamChannels || []);
+  target.joinLinks = target.joinLinks || structuredClone(window.dashboardSeed.joinLinks || []);
   target.teachingTopics = target.teachingTopics || structuredClone(window.dashboardSeed.teachingTopics || []);
   target.content = target.content || [];
   target.content.forEach((post) => {
@@ -61,6 +63,8 @@ function render() {
   renderPlatformChart();
   renderOwnerChart();
   renderChannelSummary();
+  renderJoinLinks();
+  renderJoinCreditList();
   renderTeachNext();
   renderStageChart();
   renderActionQueue();
@@ -80,7 +84,7 @@ function render() {
 function renderKpis() {
   const totalViews = sum(state.content, "views");
   const totalEngagement = state.content.reduce((total, post) => total + engagement(post), 0);
-  const totalJoins = sum(state.content, "joins");
+  const totalJoins = sum(state.joinLinks, "creditedJoins") || sum(state.content, "joins");
   const openGroupPosts = state.groupPosts.filter((post) => post.status === "Needs reply").length;
   const clipsShipped = state.content.length;
   const engagementRate = totalViews ? (totalEngagement / totalViews) * 100 : 0;
@@ -88,7 +92,7 @@ function renderKpis() {
   const kpis = [
     { label: "Content Views", value: compact(totalViews), detail: `${clipsShipped} tracked posts` },
     { label: "Engagement Rate", value: `${engagementRate.toFixed(1)}%`, detail: "Likes, comments, shares, saves" },
-    { label: "Attributed Joins", value: compact(totalJoins), detail: "Manual or tracked estimate" },
+    { label: "Credited Joins", value: compact(totalJoins), detail: "Actual Skool invite-link credit" },
     { label: "Needs Reply", value: openGroupPosts, detail: "Skool posts waiting on action" },
   ];
 
@@ -199,6 +203,56 @@ function renderChannelSummary() {
       <p>Accounts that need OAuth, exports, or permissions.</p>
     </article>
   `;
+}
+
+function renderJoinCreditList() {
+  const sorted = [...state.joinLinks].sort((a, b) => number(b.creditedJoins) - number(a.creditedJoins));
+  const pill = document.getElementById("joinLinkCountPill");
+  if (pill) pill.textContent = `${state.joinLinks.length} links`;
+  document.getElementById("joinCreditList").innerHTML = sorted
+    .slice(0, 5)
+    .map(
+      (link, index) => `
+        <article class="winner-item">
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <div>
+            <strong>${escapeHtml(link.label)}</strong>
+            <p>${escapeHtml(link.owner)} / ${escapeHtml(link.platform)} / ${escapeHtml(link.status)}</p>
+          </div>
+          <b>${number(link.creditedJoins)}</b>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderJoinLinks() {
+  document.getElementById("joinLinkGrid").innerHTML = state.joinLinks
+    .map(
+      (link) => `
+        <article class="join-link-card">
+          <div class="join-link-top">
+            <div>
+              <span>${escapeHtml(link.platform)}</span>
+              <strong>${escapeHtml(link.label)}</strong>
+              <p>${escapeHtml(link.owner)} gets credit when this Skool link is used.</p>
+            </div>
+            <b>${number(link.creditedJoins)}</b>
+          </div>
+          <dl>
+            <dt>Status</dt>
+            <dd>${escapeHtml(link.status)}</dd>
+            <dt>Invite Link</dt>
+            <dd><a href="${safeUrl(link.skoolInviteLink)}" target="_blank" rel="noreferrer">${escapeHtml(link.skoolInviteLink)}</a></dd>
+            <dt>Last Imported</dt>
+            <dd>${escapeHtml(link.lastImported || "Not imported")}</dd>
+            <dt>Notes</dt>
+            <dd>${escapeHtml(link.notes || "Use the native Skool link directly.")}</dd>
+          </dl>
+        </article>
+      `
+    )
+    .join("");
 }
 
 function renderTeachNext() {
@@ -549,6 +603,26 @@ function addTeamChannel(event) {
   render();
 }
 
+function addJoinLink(event) {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const link = {
+    id: `jl-${Date.now()}`,
+    owner: form.get("owner"),
+    platform: form.get("platform"),
+    label: form.get("label"),
+    skoolInviteLink: form.get("skoolInviteLink"),
+    status: form.get("status"),
+    creditedJoins: number(form.get("creditedJoins")),
+    lastImported: new Date().toISOString().slice(0, 10),
+    notes: form.get("notes") || "Use the native Skool invite/referral link directly.",
+  };
+  state.joinLinks.unshift(link);
+  saveState();
+  event.currentTarget.reset();
+  render();
+}
+
 function addTeachingTopic(event) {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
@@ -689,6 +763,12 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function safeUrl(value) {
+  const url = String(value || "");
+  if (/^https?:\/\//i.test(url)) return escapeHtml(url);
+  return "#";
 }
 
 function downloadFile(filename, content, type) {

@@ -22,6 +22,7 @@
           <button class="nav-item is-active" type="button" data-view="overview">Overview</button>
           <button class="nav-item" type="button" data-view="content">Content</button>
           <button class="nav-item" type="button" data-view="channels">Channels</button>
+          <button class="nav-item" type="button" data-view="join-links">Join Links</button>
           <button class="nav-item" type="button" data-view="teaching">Teaching</button>
           <button class="nav-item" type="button" data-view="group">Group</button>
           <button class="nav-item" type="button" data-view="experiments">Experiments</button>
@@ -143,6 +144,31 @@
             <section class="surface">
               <div class="surface-header">
                 <div>
+                  <p class="eyebrow">Join Attribution</p>
+                  <h2>Credit From Actual Skool Invite Links</h2>
+                </div>
+                <span class="pill accent" id="joinLinkCountPill"></span>
+              </div>
+              <div class="winner-list" id="joinCreditList"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Easiest Setup</p>
+                  <h2>Use Native Links Directly</h2>
+                </div>
+              </div>
+              <div class="principle-list">
+                <p>Each team member uses their actual Skool invite/referral link. Skool credits the join as invited by that person, then we import or log the credited joins here.</p>
+              </div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
                   <p class="eyebrow">Teaching OS</p>
                   <h2>What To Teach Next</h2>
                 </div>
@@ -159,6 +185,103 @@
                 </div>
               </div>
               <div id="stageChart" class="bar-chart"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="join-links">
+          <div class="dashboard-grid form-grid">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Skool Join Links</p>
+                  <h2>Owner-Level Join Credit</h2>
+                </div>
+                <span class="pill">Native Skool Links</span>
+              </div>
+              <div class="join-link-grid" id="joinLinkGrid"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Add Link</p>
+                  <h2>Register A Credited Invite Link</h2>
+                </div>
+              </div>
+              <form class="entry-form" id="joinLinkForm">
+                <label>
+                  Owner
+                  <input name="owner" required placeholder="Austin, Devin, X Scale" />
+                </label>
+                <label>
+                  Platform
+                  <select name="platform">
+                    <option>TikTok</option>
+                    <option>Instagram</option>
+                    <option>YouTube</option>
+                    <option>LinkedIn</option>
+                    <option>Email</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  Label
+                  <input name="label" required placeholder="Austin TikTok" />
+                </label>
+                <label>
+                  Actual Skool Invite Link
+                  <input name="skoolInviteLink" required placeholder="https://www.skool.com/..." />
+                </label>
+                <div class="input-row">
+                  <label>
+                    Credited Joins
+                    <input name="creditedJoins" type="number" min="0" value="0" />
+                  </label>
+                  <label>
+                    Status
+                    <select name="status">
+                      <option>Active</option>
+                      <option>Needs link</option>
+                      <option>Paused</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Notes
+                  <input name="notes" placeholder="Use directly in TikTok bio" />
+                </label>
+                <button class="primary-btn full" type="submit">Add Join Link</button>
+              </form>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Import Rule</p>
+                  <h2>How Credit Gets Into The Dashboard</h2>
+                </div>
+              </div>
+              <div class="pipeline-steps">
+                <div><span>1</span><strong>Share Link</strong><p>Austin, Devin, or another team member uses their actual Skool invite link.</p></div>
+                <div><span>2</span><strong>Join</strong><p>New member joins through that link and Skool records invited-by credit.</p></div>
+                <div><span>3</span><strong>Import</strong><p>Pull, export, or manually enter credited joins from Skool member/referral data.</p></div>
+                <div><span>4</span><strong>Analyze</strong><p>Compare credited joins against public content performance by owner/channel.</p></div>
+              </div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Important</p>
+                  <h2>Do Not Wrap The Link First</h2>
+                </div>
+              </div>
+              <div class="principle-list">
+                <p>For clean Skool invited-by credit, use the real Skool invite/referral link directly. Redirects or link shorteners can make Skool see traffic as direct or external instead of the actual inviter.</p>
+              </div>
             </section>
           </div>
         </section>
