@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Growth Lab Command Center</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2306121f'/%3E%3Cpath d='M14 44V18h10v26H14Zm16 0V26h10v18H30Zm16 0V12h10v32H46Z' fill='%2300c9be'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Dashboard navigation">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <strong>AI Growth Lab</strong>
+            <span>Command Center</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Dashboard sections">
+          <button class="nav-item is-active" type="button" data-view="overview">Overview</button>
+          <button class="nav-item" type="button" data-view="content">Content</button>
+          <button class="nav-item" type="button" data-view="channels">Channels</button>
+          <button class="nav-item" type="button" data-view="teaching">Teaching</button>
+          <button class="nav-item" type="button" data-view="group">Group</button>
+          <button class="nav-item" type="button" data-view="experiments">Experiments</button>
+          <button class="nav-item" type="button" data-view="integrations">Integrations</button>
+        </nav>
+
+        <div class="sidebar-note">
+          <span>Current Sprint</span>
+          <strong>IBD Assist Build-In-Public</strong>
+          <p>Offer, page, ads, optimization, and clips tracked in one place.</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Free Group Home Base</p>
+            <h1>Track the loop from content to members to Odyssey usage.</h1>
+          </div>
+          <div class="toolbar" aria-label="Dashboard actions">
+            <button class="secondary-btn" type="button" id="exportJsonBtn">Export JSON</button>
+            <button class="secondary-btn" type="button" id="exportCsvBtn">Export CSV</button>
+            <button class="primary-btn" type="button" id="resetBtn">Reset Sample</button>
+          </div>
+        </header>
+
+        <section class="status-strip" aria-label="Operating loop status">
+          <div>
+            <span>Monday</span>
+            <strong>Offer</strong>
+          </div>
+          <div>
+            <span>Tuesday</span>
+            <strong>Ads Launched</strong>
+          </div>
+          <div>
+            <span>Friday</span>
+            <strong>Optimize</strong>
+          </div>
+          <div>
+            <span>Every Week</span>
+            <strong>Clip + Learn</strong>
+          </div>
+        </section>
+
+        <section class="panel is-active" data-panel="overview">
+          <div class="kpi-grid" id="kpiGrid"></div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Weekly Loop</p>
+                  <h2>Live Call Execution</h2>
+                </div>
+                <span class="pill">IBD Assist</span>
+              </div>
+              <div class="loop-list" id="weeklyLoop"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Content Intelligence</p>
+                  <h2>What Is Working</h2>
+                </div>
+                <span class="pill accent">This Week</span>
+              </div>
+              <div id="platformChart" class="bar-chart"></div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Next Actions</p>
+                  <h2>Operating Queue</h2>
+                </div>
+              </div>
+              <div class="action-list" id="actionQueue"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Top Posts</p>
+                  <h2>Make More Of This</h2>
+                </div>
+              </div>
+              <div class="winner-list" id="winnerList"></div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Team Channels</p>
+                  <h2>Who Is Driving Reach</h2>
+                </div>
+                <span class="pill" id="channelCountPill"></span>
+              </div>
+              <div id="ownerChart" class="bar-chart"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Auto Pull</p>
+                  <h2>Connection Status</h2>
+                </div>
+              </div>
+              <div class="channel-summary" id="channelSummary"></div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Teaching OS</p>
+                  <h2>What To Teach Next</h2>
+                </div>
+                <span class="pill warning" id="teachNextPill"></span>
+              </div>
+              <div class="teaching-mini-list" id="teachNextList"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Curriculum Coverage</p>
+                  <h2>Where The Gaps Are</h2>
+                </div>
+              </div>
+              <div id="stageChart" class="bar-chart"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="content">
+          <div class="dashboard-grid form-grid">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Content Tracker</p>
+                  <h2>Posts, Clips, Results</h2>
+                </div>
+                <div class="filters">
+                  <select id="platformFilter" aria-label="Filter by platform"></select>
+                  <select id="sourceFilter" aria-label="Filter by source"></select>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Post</th>
+                      <th>Owner</th>
+                      <th>Platform</th>
+                      <th>Channel</th>
+                      <th>Hook</th>
+                      <th>Views</th>
+                      <th>Eng.</th>
+                      <th>Joins</th>
+                      <th>Score</th>
+                      <th>Next</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contentTable"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Add Result</p>
+                  <h2>Log A New Clip</h2>
+                </div>
+              </div>
+              <form class="entry-form" id="contentForm">
+                <label>
+                  Title
+                  <input name="title" required placeholder="Friday optimization clip" />
+                </label>
+                <label>
+                  Platform
+                  <select name="platform">
+                    <option>TikTok</option>
+                    <option>Instagram Reels</option>
+                    <option>YouTube Shorts</option>
+                    <option>Skool</option>
+                  </select>
+                </label>
+                <label>
+                  Owner
+                  <input name="owner" placeholder="Devin, Austin, X Scale" />
+                </label>
+                <label>
+                  Channel / Handle
+                  <input name="channel" placeholder="@handle" />
+                </label>
+                <label>
+                  Source
+                  <select name="source">
+                    <option>Live Clip</option>
+                    <option>Founder Organic</option>
+                    <option>Odyssey Demo</option>
+                    <option>Course Clip</option>
+                  </select>
+                </label>
+                <label>
+                  Hook
+                  <input name="hook" required placeholder="We built the offer live" />
+                </label>
+                <div class="input-row">
+                  <label>
+                    Views
+                    <input name="views" type="number" min="0" value="0" />
+                  </label>
+                  <label>
+                    Likes
+                    <input name="likes" type="number" min="0" value="0" />
+                  </label>
+                </div>
+                <div class="input-row">
+                  <label>
+                    Comments
+                    <input name="comments" type="number" min="0" value="0" />
+                  </label>
+                  <label>
+                    Shares
+                    <input name="shares" type="number" min="0" value="0" />
+                  </label>
+                </div>
+                <div class="input-row">
+                  <label>
+                    Saves
+                    <input name="saves" type="number" min="0" value="0" />
+                  </label>
+                  <label>
+                    Joins
+                    <input name="joins" type="number" min="0" value="0" />
+                  </label>
+                </div>
+                <label>
+                  Next Action
+                  <input name="next" placeholder="Cut 2 more variations" />
+                </label>
+                <button class="primary-btn full" type="submit">Add Content Result</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="channels">
+          <div class="dashboard-grid form-grid">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Team Channel Registry</p>
+                  <h2>All Social Channels Feeding The Group</h2>
+                </div>
+                <span class="pill accent">Auto-pull ready</span>
+              </div>
+              <div class="channel-grid" id="channelGrid"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Add Channel</p>
+                  <h2>Register A Team Account</h2>
+                </div>
+              </div>
+              <form class="entry-form" id="channelForm">
+                <label>
+                  Owner
+                  <input name="owner" required placeholder="Team member or brand" />
+                </label>
+                <label>
+                  Platform
+                  <select name="platform">
+                    <option>TikTok</option>
+                    <option>Instagram Reels</option>
+                    <option>YouTube Shorts</option>
+                    <option>Skool</option>
+                  </select>
+                </label>
+                <label>
+                  Handle
+                  <input name="handle" required placeholder="@handle" />
+                </label>
+                <label>
+                  Role
+                  <input name="role" placeholder="Founder organic, brand channel, team organic" />
+                </label>
+                <label>
+                  Pull Method
+                  <input name="pullMethod" placeholder="YouTube API, Meta API, export, Zapier" />
+                </label>
+                <button class="primary-btn full" type="submit">Add Team Channel</button>
+              </form>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Team Leaderboard</p>
+                  <h2>Top Performing Content Across Everyone</h2>
+                </div>
+              </div>
+              <div class="winner-list" id="teamWinnerList"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Automation Notes</p>
+                  <h2>What The Pull Job Needs</h2>
+                </div>
+              </div>
+              <div class="principle-list">
+                <p>Each team account needs a platform, owner, handle, auth method, and normalized post metrics.</p>
+                <ul>
+                  <li>YouTube: OAuth channel analytics.</li>
+                  <li>Instagram: Meta business/creator insights permissions.</li>
+                  <li>TikTok: approved API path or scheduled exports.</li>
+                  <li>Skool: Zapier/API path for group activity.</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="teaching">
+          <div class="dashboard-grid form-grid">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Teaching Backlog</p>
+                  <h2>Questions, Lessons, Lives, And Course Assets</h2>
+                </div>
+                <div class="filters">
+                  <select id="teachingStatusFilter" aria-label="Filter teaching topics by status"></select>
+                  <select id="teachingStageFilter" aria-label="Filter teaching topics by stage"></select>
+                </div>
+              </div>
+              <div class="teaching-list" id="teachingList"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Add Topic</p>
+                  <h2>Capture What Members Need</h2>
+                </div>
+              </div>
+              <form class="entry-form" id="teachingForm">
+                <label>
+                  Topic
+                  <input name="title" required placeholder="How to pick the first offer" />
+                </label>
+                <label>
+                  Stage
+                  <select name="stage">
+                    <option>Offer</option>
+                    <option>Page</option>
+                    <option>Ads</option>
+                    <option>Optimization</option>
+                    <option>Community</option>
+                    <option>Odyssey</option>
+                  </select>
+                </label>
+                <label>
+                  Type
+                  <select name="type">
+                    <option>Course lesson</option>
+                    <option>Live teaching segment</option>
+                    <option>Live clip + FAQ</option>
+                    <option>Template</option>
+                    <option>Internal SOP</option>
+                  </select>
+                </label>
+                <label>
+                  Evidence
+                  <input name="evidence" placeholder="Member asked this twice / top clip topic" />
+                </label>
+                <div class="input-row">
+                  <label>
+                    Demand
+                    <input name="demand" type="number" min="1" max="10" value="5" />
+                  </label>
+                  <label>
+                    Priority
+                    <select name="priority">
+                      <option>P0</option>
+                      <option>P1</option>
+                      <option>P2</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Next Action
+                  <input name="next" placeholder="Record lesson, clip live, make template" />
+                </label>
+                <button class="primary-btn full" type="submit">Add Teaching Topic</button>
+              </form>
+            </section>
+          </div>
+
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">System Rule</p>
+                  <h2>How We Decide What To Teach</h2>
+                </div>
+              </div>
+              <div class="principle-list">
+                <p>Every teaching topic should come from at least one real signal.</p>
+                <ul>
+                  <li>Member question or repeated confusion.</li>
+                  <li>Top-performing social clip or comment thread.</li>
+                  <li>Live-call friction or Odyssey capability gap.</li>
+                  <li>Course gap blocking the AI Growth Sprint.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Conversion Rule</p>
+                  <h2>Question To Asset Pipeline</h2>
+                </div>
+              </div>
+              <div class="pipeline-steps">
+                <div><span>1</span><strong>Question</strong><p>Capture the member question or content signal.</p></div>
+                <div><span>2</span><strong>Topic</strong><p>Turn it into a teachable topic with evidence.</p></div>
+                <div><span>3</span><strong>Asset</strong><p>Decide live segment, course lesson, FAQ, clip, or template.</p></div>
+                <div><span>4</span><strong>Replay</strong><p>Publish, clip, and track whether it reduces confusion.</p></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="group">
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Skool Pulse</p>
+                  <h2>Posts That Need Movement</h2>
+                </div>
+                <span class="pill warning" id="unansweredCount"></span>
+              </div>
+              <div class="group-feed" id="groupFeed"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Member Signals</p>
+                  <h2>Questions Becoming Content</h2>
+                </div>
+              </div>
+              <div id="questionCloud" class="question-cloud"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="experiments">
+          <section class="surface">
+            <div class="surface-header">
+              <div>
+                <p class="eyebrow">IBD Assist Journey</p>
+                <h2>Offer, Page, Ad, Optimization Experiments</h2>
+              </div>
+              <span class="pill">3-Week Sprint</span>
+            </div>
+            <div class="experiment-grid" id="experimentGrid"></div>
+          </section>
+        </section>
+
+        <section class="panel" data-panel="integrations">
+          <div class="dashboard-grid two-col">
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">Data Sources</p>
+                  <h2>Connection Roadmap</h2>
+                </div>
+              </div>
+              <div class="integration-list" id="integrationList"></div>
+            </section>
+
+            <section class="surface">
+              <div class="surface-header">
+                <div>
+                  <p class="eyebrow">V1 Rule</p>
+                  <h2>Keep The Dashboard Useful</h2>
+                </div>
+              </div>
+              <div class="principle-list">
+                <p>Every number should answer one of four questions.</p>
+                <ul>
+                  <li>What content worked?</li>
+                  <li>What did the group care about?</li>
+                  <li>What did we launch?</li>
+                  <li>What should we do next?</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+
+          <section class="surface">
+            <div class="surface-header">
+              <div>
+                <p class="eyebrow">Skool Data Plan</p>
+                <h2>Official Events First, Post Intelligence Second</h2>
+              </div>
+              <span class="pill warning">Needs backend</span>
+            </div>
+            <div class="skool-plan-grid">
+              <article>
+                <span>Lane 1</span>
+                <strong>Official Zapier</strong>
+                <p>Membership questions, source attribution, and paid member events. Safest first integration.</p>
+              </article>
+              <article>
+                <span>Lane 2</span>
+                <strong>Optional SkoolAPI</strong>
+                <p>Poll posts, authors, categories, and activity if we accept the third-party dependency risk.</p>
+              </article>
+              <article>
+                <span>Lane 3</span>
+                <strong>Fallback Capture</strong>
+                <p>Admin notification parsing or manual logging for questions, top posts, and teaching topics.</p>
+              </article>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
